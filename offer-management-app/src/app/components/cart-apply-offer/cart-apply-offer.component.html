@@ -1,0 +1,19 @@
+<h3>Cart & Apply Offer</h3>
+<ul class="list-group mb-3">
+  <li class="list-group-item" *ngFor="let item of cart">
+    {{ item.qty }} × {{ item.name }} - ₹{{ item.price }} each
+  </li>
+</ul>
+<div class="mb-3">
+  <label>Select Offer</label>
+  <select class="form-select" [(ngModel)]="selectedOfferId">
+    <option [ngValue]="null">-- Select Offer --</option>
+    <option *ngFor="let offer of offers" [ngValue]="offer.id">{{ offer.title }} ({{ offer.discountType }} - {{ offer.value }})</option>
+  </select>
+</div>
+<div *ngIf="selectedOffer">
+  <p>Subtotal: ₹{{ subtotal }}</p>
+  <p *ngIf="message" class="text-danger">{{ message }}</p>
+  <p *ngIf="!message">Discount: ₹{{ discount.toFixed(2) }}</p>
+  <p *ngIf="!message">Total after Discount: ₹{{ total.toFixed(2) }}</p>
+</div>

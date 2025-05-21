@@ -1,0 +1,14 @@
+<div class="container mt-4">
+  <ul class="nav nav-tabs">
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'offer'" (click)="activeTab = 'offer'">Offer Management</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" [class.active]="activeTab === 'cart'" (click)="activeTab = 'cart'">Cart & Apply Offer</a>
+    </li>
+  </ul>
+  <div class="mt-4">
+    <app-offer-management *ngIf="activeTab === 'offer'"></app-offer-management>
+    <app-cart-apply-offer *ngIf="activeTab === 'cart'"></app-cart-apply-offer>
+  </div>
+</div>
