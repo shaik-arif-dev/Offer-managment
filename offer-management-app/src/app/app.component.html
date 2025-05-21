@@ -1,14 +1,65 @@
-<div class="container mt-4">
-  <ul class="nav nav-tabs">
-    <li class="nav-item">
-      <a class="nav-link" [class.active]="activeTab === 'offer'" (click)="activeTab = 'offer'">Offer Management</a>
+<div class="container mt-4" style="font-family: 'Segoe UI', sans-serif; max-width: 800px; margin: auto;">
+  <!-- Tabs -->
+  <ul class="nav-tabs" style="display: flex; border-bottom: 2px solid #eee; padding-bottom: 8px; margin-bottom: 20px;">
+    <li style="list-style: none; margin-right: 20px;">
+      <a 
+        (click)="activeTab = 'offer'" 
+        [ngStyle]="{
+          color: activeTab === 'offer' ? '#007bff' : '#555',
+          borderBottom: activeTab === 'offer' ? '3px solid #007bff' : '3px solid transparent',
+          padding: '8px 12px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease'
+        }"
+      >Offer Management</a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link" [class.active]="activeTab === 'cart'" (click)="activeTab = 'cart'">Cart & Apply Offer</a>
+    <li style="list-style: none;">
+      <a 
+        (click)="activeTab = 'cart'" 
+        [ngStyle]="{
+          color: activeTab === 'cart' ? '#007bff' : '#555',
+          borderBottom: activeTab === 'cart' ? '3px solid #007bff' : '3px solid transparent',
+          padding: '8px 12px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease'
+        }"
+      >Cart & Apply Offer</a>
+    </li>
+    <li style="list-style: none;">
+      <a
+        href="#contact-us"
+        [ngStyle]="{
+          color: '#007bff',
+          padding: '8px 12px',
+          fontWeight: 'bold',
+          cursor: 'pointer',
+          transition: 'all 0.3s ease'
+        }"
+      >Contact Me</a>
     </li>
   </ul>
-  <div class="mt-4">
+
+  <!-- Tab Content -->
+  <div class="tab-content" style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; box-shadow: 0 2px 6px rgba(0,0,0,0.05);">
     <app-offer-management *ngIf="activeTab === 'offer'"></app-offer-management>
     <app-cart-apply-offer *ngIf="activeTab === 'cart'"></app-cart-apply-offer>
+  </div>
+
+  <!-- Contact Us Bar -->
+  <div id="contact-us" style="
+    margin-top: 30px;
+    padding: 16px;
+    background-color: #007bff;
+    color: white;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  ">
+    <h5 style="margin: 0 0 5px;">Contact Full Stack Developer</h5>
+    <p style="margin: 0;">Arif Shaik</p>
+    <p style="margin: 0;">📞 +91-9177393512 | 📧 shaikarif&#64;gmail.com</p>
+    <p style="margin: 0;">📍 Hyderabad</p>
   </div>
 </div>

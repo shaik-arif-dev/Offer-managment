@@ -1,19 +1,63 @@
-<h3>Cart & Apply Offer</h3>
-<ul class="list-group mb-3">
-  <li class="list-group-item" *ngFor="let item of cart">
-    {{ item.qty }} × {{ item.name }} - ₹{{ item.price }} each
-  </li>
-</ul>
-<div class="mb-3">
-  <label>Select Offer</label>
-  <select class="form-select" [(ngModel)]="selectedOfferId">
-    <option [ngValue]="null">-- Select Offer --</option>
-    <option *ngFor="let offer of offers" [ngValue]="offer.id">{{ offer.title }} ({{ offer.discountType }} - {{ offer.value }})</option>
-  </select>
+<div style="max-width: 450px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.09); padding: 28px;">
+  <h3 style="margin-bottom: 18px; font-size: 1.5rem; color: #1976d2; letter-spacing: 0.5px;">🛒 Cart &amp; Apply Offer</h3>
+
+  <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+    <li *ngFor="let item of cart; let i = index"
+        style="background: #f3f6fa; border-radius: 8px; padding: 12px 18px; margin-bottom: 10px; font-size: 1.05rem; color: #374151; display: flex; align-items: center;">
+      <button type="button"
+              (click)="decreaseQty(i)"
+              style="background: #e3e9f4; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 1.2rem; color: #1976d2; cursor: pointer; margin-right: 8px; font-weight: bold;">-</button>
+      <input type="number"
+             [(ngModel)]="item.qty"
+             (ngModelChange)="onQtyChange(i)"
+             min="1"
+             style="width: 40px; text-align: center; border: 1px solid #d1d5db; border-radius: 6px; margin-right: 8px; font-size: 1rem;"/>
+      <button type="button"
+              (click)="increaseQty(i)"
+              style="background: #e3e9f4; border: none; border-radius: 50%; width: 28px; height: 28px; font-size: 1.2rem; color: #1976d2; cursor: pointer; margin-right: 14px; font-weight: bold;">+</button>
+      <span style="flex: 1;">{{ item.name }}</span>
+      <span style="color: #388e3c;">₹{{ item.price }}</span>
+      <span style="font-size: 0.95em; color: #888; margin-left: 4px;">each</span>
+    </li>
+  </ul>
+  <div style="margin-bottom: 22px;">
+    <label style="font-weight: 600; color: #2c3e50; margin-bottom: 7px; display: block;">Select Offer</label>
+    <select style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #f9fafb; transition: border-color 0.2s;"
+            [(ngModel)]="selectedOfferId"
+            onfocus="this.style.borderColor='#1976d2'" onblur="this.style.borderColor='#d1d5db'">
+      <option [ngValue]="null">-- Select Offer --</option>
+      <option *ngFor="let offer of offers" [ngValue]="offer.id">
+        {{ offer.title }} ({{ offer.discountType }} - {{ offer.value }})
+      </option>
+    </select>
+  </div>
+  <ul style="list-style: none; padding: 0; margin-bottom: 20px;">
+    <li *ngFor="let item of cart" 
+        style="background: #f3f6fa; border-radius: 8px; padding: 12px 18px; margin-bottom: 10px; font-size: 1.05rem; color: #374151; display: flex; align-items: center;">
+      <span style="font-weight: 600; color: #1976d2;">{{ item.qty }}×</span>
+      <span style="margin: 0 8px 0 12px; flex: 1;">{{ item.name }}</span>
+      <span style="color: #388e3c;">₹{{ item.price }}</span>
+      <span style="font-size: 0.95em; color: #888; margin-left: 4px;">each</span>
+    </li>
+  </ul>
+  <div *ngIf="selectedOffer" style="background: #f9fafb; border-radius: 10px; padding: 18px 18px 12px 18px; box-shadow: 0 2px 8px rgba(25,118,210,0.05); margin-bottom: 0;">
+    <div style="font-size: 1.08rem; margin-bottom: 8px;">
+      <span style="color: #555;">Subtotal:</span>
+      <span style="float: right; font-weight: 600; color: #1976d2;">₹{{ subtotal }}</span>
+    </div>
+    <div *ngIf="message" style="color: #e53935; font-weight: 600; margin-bottom: 8px;">
+      {{ message }}
+    </div>
+<div *ngIf="offerError" style="color: #e53935; font-weight: 600; margin-bottom: 8px;">
+  {{ offerError }}
 </div>
-<div *ngIf="selectedOffer">
-  <p>Subtotal: ₹{{ subtotal }}</p>
-  <p *ngIf="message" class="text-danger">{{ message }}</p>
-  <p *ngIf="!message">Discount: ₹{{ discount.toFixed(2) }}</p>
-  <p *ngIf="!message">Total after Discount: ₹{{ total.toFixed(2) }}</p>
+<div *ngIf="!offerError" style="margin-bottom: 6px;">
+  <span style="color: #388e3c;">Discount:</span>
+  <span style="float: right; font-weight: 600; color: #388e3c;">₹{{ discount.toFixed(2) }}</span>
+</div>
+    <div *ngIf="!message" style="font-size: 1.1rem; font-weight: 700;">
+      <span style="color: #2c3e50;">Total after Discount:</span>
+      <span style="float: right; color: #1976d2;">₹{{ total.toFixed(2) }}</span>
+    </div>
+  </div>
 </div>

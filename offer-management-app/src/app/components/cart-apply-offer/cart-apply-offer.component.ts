@@ -23,6 +23,23 @@ export class CartApplyOfferComponent implements OnInit {
   ngOnInit() {
     this.offerService.getOffers().subscribe(data => this.offers = data);
   }
+  
+  increaseQty(index: number) {
+    this.cart[index].qty++;
+  }
+  
+  decreaseQty(index: number) {
+    if (this.cart[index].qty > 1) {
+      this.cart[index].qty--;
+    }
+  }
+  
+  onQtyChange(index: number) {
+    // Prevent qty from going below 1
+    if (this.cart[index].qty < 1 || !this.cart[index].qty) {
+      this.cart[index].qty = 1;
+    }
+  }
 
   get subtotal() {
     return this.cart.reduce((sum, item) => sum + item.qty * item.price, 0);
@@ -32,16 +49,34 @@ export class CartApplyOfferComponent implements OnInit {
     return this.offers.find(o => o.id === this.selectedOfferId);
   }
 
+  // get discount(): number {
+  //   if (!this.selectedOffer) return 0;
+  //   if (this.subtotal < this.selectedOffer.minCartAmount) {
+  //     this.message = 'Offer not applicable: minimum cart amount not met.';
+  //     return 0;
+  //   }
+  //   this.message = '';
+  //   if (this.selectedOffer.discountType === 'FLAT') return this.selectedOffer.value;
+  //   if (this.selectedOffer.discountType === 'PERCENTAGE') return this.subtotal * (this.selectedOffer.value / 100);
+  //   return 0;
+  // }
+
   get discount(): number {
-    if (!this.selectedOffer) return 0;
-    if (this.subtotal < this.selectedOffer.minCartAmount) {
-      this.message = 'Offer not applicable: minimum cart amount not met.';
-      return 0;
-    }
-    this.message = '';
-    if (this.selectedOffer.discountType === 'FLAT') return this.selectedOffer.value;
-    if (this.selectedOffer.discountType === 'PERCENTAGE') return this.subtotal * (this.selectedOffer.value / 100);
+    const selectedOffer = this.selectedOffer;
+    if (!selectedOffer) return 0;
+    if (this.subtotal < selectedOffer.minCartAmount) return 0;
+    if (selectedOffer.discountType === 'FLAT') return selectedOffer.value;
+    if (selectedOffer.discountType === 'PERCENTAGE') return this.subtotal * (selectedOffer.value / 100);
     return 0;
+  }
+
+  get offerError(): string {
+    const selectedOffer = this.selectedOffer;
+    if (!selectedOffer) return '';
+    if (this.subtotal < selectedOffer.minCartAmount) {
+      return 'Offer not applicable: minimum cart amount not met.';
+    }
+    return '';
   }
 
   get total() {
