@@ -1,41 +1,109 @@
-<h3>Offer Management</h3>
-<form (ngSubmit)="saveOffer()">
-  <div class="mb-2">
-    <input class="form-control" [(ngModel)]="newOffer.title" name="title" placeholder="Title" required>
-  </div>
-  <div class="mb-2">
-    <select class="form-select" [(ngModel)]="newOffer.discountType" name="discountType">
-      <option value="FLAT">FLAT</option>
-      <option value="PERCENTAGE">PERCENTAGE</option>
-    </select>
-  </div>
-  <div class="mb-2">
-    <input type="number" class="form-control" [(ngModel)]="newOffer.value" name="value" placeholder="Value" required>
-  </div>
-  <div class="mb-2">
-    <input type="number" class="form-control" [(ngModel)]="newOffer.minCartAmount" name="minCartAmount" placeholder="Min Cart Amount">
-  </div>
-  <div class="mb-2">
-    <textarea class="form-control" [(ngModel)]="newOffer.description" name="description" placeholder="Description"></textarea>
-  </div>
-  <button class="btn btn-primary" type="submit">{{ editId ? 'Update' : 'Add' }} Offer</button>
-  <button type="button" class="btn btn-secondary ms-2" (click)="resetForm()">Reset</button>
-</form>
-<hr>
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>ID</th><th>Title</th><th>Type</th><th>Value</th><th>Min Cart</th><th>Description</th><th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let offer of offers">
-      <td>{{ offer.id }}</td><td>{{ offer.title }}</td><td>{{ offer.discountType }}</td>
-      <td>{{ offer.value }}</td><td>{{ offer.minCartAmount }}</td><td>{{ offer.description }}</td>
-      <td>
-        <button class="btn btn-sm btn-warning" (click)="editOffer(offer)">Edit</button>
-        <button class="btn btn-sm btn-danger ms-2" (click)="deleteOffer(offer.id!)">Delete</button>
-      </td>
-    </tr>
-  </tbody>
-</table>
+<div class="offer-management-container mat-elevation-z2" style="padding:24px; max-width:900px; margin:auto;">
+  <h2 class="mat-headline mb-4" [@fadeIn]="'in'">Offer Management</h2>
+  <form (ngSubmit)="saveOffer()" class="mat-card" [@fade]="'in'" style="padding: 16px; margin-bottom: 32px;">
+ <div style="display: flex; flex-wrap: wrap; gap: 24px; background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(0,0,0,0.09); padding: 32px; max-width: 700px; margin: 0 auto;">
+   <div style="flex: 1 1 260px; min-width: 220px;">
+     <label style="font-weight: 600; margin-bottom: 6px; display: block; color: #2c3e50;">Title</label>
+     <input style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #f9fafb; transition: border-color 0.2s;" 
+            type="text" [(ngModel)]="newOffer.title" name="title" required placeholder="Enter offer title"
+            onfocus="this.style.borderColor='#1976d2'" onblur="this.style.borderColor='#d1d5db'">
+   </div>
+   <div style="flex: 1 1 260px; min-width: 220px;">
+     <label style="font-weight: 600; margin-bottom: 6px; display: block; color: #2c3e50;">Discount Type</label>
+     <select style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #f9fafb; transition: border-color 0.2s;"
+             [(ngModel)]="newOffer.discountType" name="discountType"
+             onfocus="this.style.borderColor='#1976d2'" onblur="this.style.borderColor='#d1d5db'">
+       <option value="FLAT">FLAT</option>
+       <option value="PERCENTAGE">PERCENTAGE</option>
+     </select>
+   </div>
+   <div style="flex: 1 1 260px; min-width: 220px;">
+     <label style="font-weight: 600; margin-bottom: 6px; display: block; color: #2c3e50;">Value</label>
+     <input style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #f9fafb; transition: border-color 0.2s;"
+            type="number" [(ngModel)]="newOffer.value" name="value" required placeholder="Enter value"
+            onfocus="this.style.borderColor='#1976d2'" onblur="this.style.borderColor='#d1d5db'">
+   </div>
+   <div style="flex: 1 1 260px; min-width: 220px;">
+     <label style="font-weight: 600; margin-bottom: 6px; display: block; color: #2c3e50;">Min Cart Amount</label>
+     <input style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #f9fafb; transition: border-color 0.2s;"
+            type="number" [(ngModel)]="newOffer.minCartAmount" name="minCartAmount" placeholder="Enter min cart amount"
+            onfocus="this.style.borderColor='#1976d2'" onblur="this.style.borderColor='#d1d5db'">
+   </div>
+   <div style="flex: 1 1 100%; min-width: 220px;">
+     <label style="font-weight: 600; margin-bottom: 6px; display: block; color: #2c3e50;">Description</label>
+     <textarea style="width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 1rem; background: #f9fafb; min-height: 60px; resize: vertical; transition: border-color 0.2s;"
+               [(ngModel)]="newOffer.description" name="description" placeholder="Description"
+               onfocus="this.style.borderColor='#1976d2'" onblur="this.style.borderColor='#d1d5db'"></textarea>
+   </div>
+    <div *ngIf="validationErrors.length > 0" style="margin-top: 24px;">
+      <div style="background: #ffeaea; border: 1px solid #ffb3b3; border-radius: 8px; padding: 16px 20px; color: #c0392b; margin-bottom: 16px;">
+        <ul style="margin: 0; padding-left: 18px;">
+          <li *ngFor="let error of validationErrors" style="margin-bottom: 6px; font-size: 1rem;">
+            <span style="font-weight: bold; margin-right: 6px;">&#9888;</span> <!-- warning icon -->
+            {{ error }}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div style="display: flex; gap: 14px; margin-top: 12px;">
+      <button 
+        type="submit"
+        style="flex:1; background: linear-gradient(90deg, #1976d2 40%, #42a5f5 100%); color: #fff; border: none; border-radius: 8px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(25,118,210,0.09); transition: background 0.2s;">
+        {{ editId ? 'Update' : 'Add' }} Offer
+      </button>
+      <button 
+        type="button"
+        (click)="resetForm()"
+        style="flex:1; background: #f3f4f6; color: #1976d2; border: 1px solid #b6c3d2; border-radius: 8px; padding: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 0.2s;">
+        Reset
+      </button>
+    </div>
+</div>
+
+  </form>
+
+  <mat-card [@fade]="'in'">
+    <mat-table [dataSource]="offers" class="mat-elevation-z1" *ngIf="offers.length; else noOffers">
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+        <mat-cell *matCellDef="let offer">{{ offer.id }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="title">
+        <mat-header-cell *matHeaderCellDef>Title</mat-header-cell>
+        <mat-cell *matCellDef="let offer">{{ offer.title }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="discountType">
+        <mat-header-cell *matHeaderCellDef>Type</mat-header-cell>
+        <mat-cell *matCellDef="let offer">{{ offer.discountType }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <mat-header-cell *matHeaderCellDef>Value</mat-header-cell>
+        <mat-cell *matCellDef="let offer">{{ offer.value }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="minCartAmount">
+        <mat-header-cell *matHeaderCellDef>Min Cart</mat-header-cell>
+        <mat-cell *matCellDef="let offer">{{ offer.minCartAmount }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef>Description</mat-header-cell>
+        <mat-cell *matCellDef="let offer">{{ offer.description }}</mat-cell>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <mat-header-cell *matHeaderCellDef>Actions</mat-header-cell>
+        <mat-cell *matCellDef="let offer">
+          <button mat-icon-button color="accent" (click)="editOffer(offer)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteOffer(offer.id!)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="['id', 'title', 'discountType', 'value', 'minCartAmount', 'description', 'actions']"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: ['id', 'title', 'discountType', 'value', 'minCartAmount', 'description', 'actions'];"></mat-row>
+    </mat-table>
+    <ng-template #noOffers>
+      <div class="text-center text-muted py-4">No offers available.</div>
+    </ng-template>
+  </mat-card>
+</div>

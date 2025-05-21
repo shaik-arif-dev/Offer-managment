@@ -8,16 +8,17 @@ import { CartApplyOfferComponent } from './components/cart-apply-offer/cart-appl
 
 @NgModule({
   declarations: [
-    AppComponent,
-    OfferManagementComponent,
-    CartApplyOfferComponent
+    
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    AppComponent,
+    OfferManagementComponent,
+    CartApplyOfferComponent
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: []
 })
 export class AppModule { }
